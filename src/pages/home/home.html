@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+   <ion-searchbar (ionInput)="getItems($event)" [formControl]="filterInput"></ion-searchbar>
+   <ion-item>
+      <ion-label>Search by ...</ion-label>
+        <ion-select [(ngModel)]="goodsOrCompanies" #variable ='ngModel'>
+          <ion-option value="true">Companies</ion-option>
+          <ion-option value="false">Goods</ion-option>
+        </ion-select>
+   </ion-item>
+ <ion-list>
+    <ion-item-sliding *ngFor="let item of (companies | search: { companyName: filterText, companyGoods: filterText} : goodsOrCompanies === 'true'); let i = index" (click)="toggleDetails($event, i)">
+ 
+    <ion-item >
+        <h2>{{item.companyName}}</h2>
+        <ion-list *ngIf="showDetails === i" (click)="stopPropagation($event)" >
+           <ion-item *ngFor="let good of item.companyGoods"> {{good}} </ion-item>
+        </ion-list>
+    </ion-item>
+ 
+    <ion-item-options>
+      <button danger (click)="deleteCompany(item.companyName)" ><ion-icon trash></ion-icon> Delete</button>
+    </ion-item-options>
+
+
+  </ion-item-sliding>
+    
+    </ion-list>     
+</ion-content>
