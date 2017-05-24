@@ -27,7 +27,8 @@ export class NewCompany implements OnInit{
 
     ngOnInit() {
       this.existCompany =  this.navParams.get('item');
-      this.existCompanyName = this.existCompany.companyName
+      if(this.existCompany){
+      this.existCompanyName = this.existCompany.companyName}
       
      
         this.myForm = this.fb.group({
@@ -91,7 +92,7 @@ export class NewCompany implements OnInit{
       for (let i=0, max = myForm.controls.products.controls.length; i < max; i++ ) {
       objectToSubmit.companyGoods.push(myForm.controls.products.controls[i].controls.product.value)
       }
-      
+     
 
  /*PUT or PUSH methods*/  
       if(this.existCompany){
@@ -107,7 +108,7 @@ export class NewCompany implements OnInit{
   
       this.navCtrl.pop()
 
-/*refresh page with list of companies after submit*/
+        /*refresh page with list of companies after submit*/
         this.events.publish('refreshPage');
 
     }

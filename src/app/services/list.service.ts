@@ -37,7 +37,6 @@ export class ListService {
 
     putCompany(body, companyName) {
         let bodyString = JSON.stringify(body); 
-        console.log(bodyString);
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({ headers: headers }); 
 

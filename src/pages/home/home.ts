@@ -66,30 +66,10 @@ export class HomePage  implements OnInit{
     this.companies = this.listFromAPI;
   }
 
-/*
 
-  getItems(ev) {
-  
-    var val = ev.target.value;
- console.log(val);
-    
-    /*if (val && val.trim() != '') {
-      this.companies = this.companies.filter((item, index, array) => {
-        let result = array[index+1].companyName.toLowerCase().indexOf(val.toLowerCase())  > -1
-        console.log(result);
-        
-        return (array[index+1].companyName.toLowerCase().indexOf(val.toLowerCase()) > -1);
-        
-      })
-    console.log(this.companies);
-      
-    }
-}*/
   deleteCompany(companyName){
-    console.log(companyName);
       this.listService.deleteCompany(companyName)
           .subscribe(data => {
-            console.log(data)
           })
           location.reload();
   
@@ -97,8 +77,7 @@ export class HomePage  implements OnInit{
   }
  /*Opens company products */
      toggleDetails(event, i) {
-       /*console.log('from outside');
-  event.stopPropagation();*/
+    
     if (this.showDetails === i) {
         this.showDetails = false;
        /* this.icon = 'ios-add-circle-outline';*/
@@ -107,17 +86,13 @@ export class HomePage  implements OnInit{
        /* this.icon = 'ios-remove-circle-outline';*/
     }
   }
-/*  stopPropagation(event){
-    console.log('from inside')
-    event.stopImmediatePropagation();
-  }*/
+
 
   addNewCompany(){
     this.navCtrl.push(NewCompany)
   }  
 
   editCompany(item){
-    console.log(item);
     this.navCtrl.push(NewCompany, { item: item})
     
   }
