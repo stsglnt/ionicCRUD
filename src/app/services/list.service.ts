@@ -30,8 +30,20 @@ export class ListService {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({ headers: headers }); 
 
-        return this.http.post(this.baseUrl, body, options) 
+        return this.http.post(this.baseUrl, bodyString, options) 
                          .map((res:Response) => res.json()) // ...and calling .json() on the response to return data
                          
     }
+
+    putCompany(body, companyName) {
+        let bodyString = JSON.stringify(body); 
+        console.log(bodyString);
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({ headers: headers }); 
+
+        return this.http.put(this.baseUrl + "/" + companyName, bodyString, options) 
+                         .map((res:Response) => res.json()) // ...and calling .json() on the response to return data
+
+    }
+
 }

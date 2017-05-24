@@ -27,7 +27,7 @@
           <ion-label floating>Company Product {{i + 1}}</ion-label>
           <ion-input formControlName="product"></ion-input>
         </ion-item>
-         <a *ngIf="myForm.controls.products.controls.length > 1" (click)="removeProduct(i)"> Remove </a>
+         <a *ngIf="myForm.controls.products.controls.length" (click)="removeProduct(i)"> Remove </a>
         
       </ion-list>
       <button type="button" ion-button (click)="addProduct()">Add Product</button>

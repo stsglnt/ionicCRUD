@@ -4,6 +4,7 @@ import { Validators, FormGroup, FormControl, FormArray, FormBuilder } from '@ang
 
 import { ListService } from '../../app/services/list.service'; 
 
+import { Events } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -12,48 +13,74 @@ import { ListService } from '../../app/services/list.service';
 })
 export class NewCompany implements OnInit{
   myForm: any;
-
+  existCompany: any;
+  existCompanyName: any;
   constructor ( public navCtrl: NavController, 
                 public navParams: NavParams,
                 public fb: FormBuilder,
                 private listService: ListService,
+                public events: Events,
 ) {  }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NewCompany');
+      ionViewDidLoad() {
+      }
 
+    ngOnInit() {
+      this.existCompany =  this.navParams.get('item');
+      this.existCompanyName = this.existCompany.companyName
+      
+     
+        this.myForm = this.fb.group({
+        title: ['', Validators.required],
+        products: this.fb.array([
+              ])
+      })
+
+/*run when user pressed EDIT on existed company*/
+
+     if(this.existCompany){
+        this.toFormGroup(this.existCompany)
+        
+      }
+      
+    }
+
+/* method to fill fields with data from service */
+
+    toFormGroup(items){
+        this.myForm.patchValue({
+          title: items.companyName,
+         
+        })
+         items.companyGoods.forEach(element => {
+             const control = <FormArray>this.myForm.controls['products'];
+              control.push(this.fb.group({
+              product: [element, Validators.required],
+       
+          }));
+         });
+  }
  
-  }
-
-  ngOnInit() {
-      this.myForm = this.fb.group({
-      title: ['', Validators.required],
-      products: this.fb.array([
-                this.initProducts()
-            ])
-    })
-    console.log(this.myForm.controls);
-  }
-  
+/*add new control */
     initProducts(){
          return this.fb.group({
               product: ['', Validators.required],
        
           });
     }
-    /*Add new field for product */
+
+/*Add new field for product */
     addProduct() {
-        // add address to the list
         const control = <FormArray>this.myForm.controls['products'];
         control.push(this.initProducts());
     }
-    /*remove field*/
+/*remove field*/
     removeProduct(i: number) {
-        // remove address from the list
         const control = <FormArray>this.myForm.controls['products'];
         control.removeAt(i);
     }
-    
+
+/*Save or Submit form*/
     submitForm(myForm){
 
       var objectToSubmit = {
@@ -64,13 +91,24 @@ export class NewCompany implements OnInit{
       for (let i=0, max = myForm.controls.products.controls.length; i < max; i++ ) {
       objectToSubmit.companyGoods.push(myForm.controls.products.controls[i].controls.product.value)
       }
-      console.log(myForm)
-      console.log(objectToSubmit);
+      
 
-      this.listService.postCompany(objectToSubmit)
-        .subscribe(res=>{
-          console.log(res);
+ /*PUT or PUSH methods*/  
+      if(this.existCompany){
+        this.listService.putCompany(objectToSubmit, this.existCompanyName)
+            .subscribe(res => {
+            })
+      } else {
+        this.listService.postCompany(objectToSubmit)
+          .subscribe(res=>{
         })
+      }
+
+  
+      this.navCtrl.pop()
+
+/*refresh page with list of companies after submit*/
+        this.events.publish('refreshPage');
 
     }
     

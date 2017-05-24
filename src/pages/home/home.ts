@@ -5,9 +5,11 @@ import { Http} from '@angular/http';
 import { FormControl } from '@angular/forms';
 import { ListService } from '../../app/services/list.service'; 
 import 'rxjs/add/operator/debounceTime';
-import { LoadingController } from 'ionic-angular'
+import { LoadingController } from 'ionic-angular';
 
-import { NewCompany } from '../new-company/new-company'
+import { NewCompany } from '../new-company/new-company';
+import { Events } from 'ionic-angular';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -26,22 +28,28 @@ export class HomePage  implements OnInit{
   constructor(public navCtrl: NavController,
               private listService: ListService,
               private http: Http,
-              public loadingCtrl: LoadingController 
+              public loadingCtrl: LoadingController,
+              public events: Events  
   ) {
   }
   ionViewDidLoad() {
      this.getList();
   }
+
   
   ngOnInit(){
+     this.events.subscribe('refreshPage', () => {
+          location.reload();
+  });
+    
     this.loading.present();
+
     this.filterText = "";
      this.filterInput
       .valueChanges
       .debounceTime(500)
       .subscribe(term => {
         this.filterText = term;
-        console.log(term);
       });
       this.goodsOrCompanies = 'true';
   }
@@ -58,15 +66,13 @@ export class HomePage  implements OnInit{
     this.companies = this.listFromAPI;
   }
 
-
+/*
 
   getItems(ev) {
-    // Reset items back to all of the items
-
-    // set val to the value of the ev target
+  
     var val = ev.target.value;
  console.log(val);
-    // if the value is an empty string don't filter the items
+    
     /*if (val && val.trim() != '') {
       this.companies = this.companies.filter((item, index, array) => {
         let result = array[index+1].companyName.toLowerCase().indexOf(val.toLowerCase())  > -1
@@ -77,15 +83,16 @@ export class HomePage  implements OnInit{
       })
     console.log(this.companies);
       
-    }*/
-  }
+    }
+}*/
   deleteCompany(companyName){
     console.log(companyName);
       this.listService.deleteCompany(companyName)
           .subscribe(data => {
             console.log(data)
           })
-  this.getList()
+          location.reload();
+  
           
   }
  /*Opens company products */
@@ -111,6 +118,8 @@ export class HomePage  implements OnInit{
 
   editCompany(item){
     console.log(item);
+    this.navCtrl.push(NewCompany, { item: item})
+    
   }
 
 

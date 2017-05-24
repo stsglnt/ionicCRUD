@@ -1,7 +1,6 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Home</ion-title>
-    <button>  </button>
   </ion-navbar>
 </ion-header>
 
@@ -9,7 +8,7 @@
    <ion-fab top right edge>
     <button ion-fab mini (click)="addNewCompany()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
-   <ion-searchbar (ionInput)="getItems($event)" [formControl]="filterInput"></ion-searchbar>
+   <ion-searchbar  [formControl]="filterInput"></ion-searchbar>
    <ion-item margin-bottom>
       <ion-label>Search by ...</ion-label>
         <ion-select [(ngModel)]="goodsOrCompanies" #variable ='ngModel'>
@@ -22,8 +21,8 @@
  
     <ion-item >
         <h2 >{{item.companyName}}</h2>
-        <h2 *ngIf="!item.companyNamy">Company Name Is Not Provided</h2>
-        
+        <h2 *ngIf="!item.companyName">Company Name Is Not Provided</h2>
+        <ion-icon name="arrow-dropright" item-right></ion-icon>
     </ion-item>
  
     <ion-item-options>
